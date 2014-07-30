@@ -1,0 +1,5 @@
+# For more info on authentication, see: http://developer.modeanalytics.com/#page:authentication
+
+auth:
+  token: api_token
+  secret: api_secret

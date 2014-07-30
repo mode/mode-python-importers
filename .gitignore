@@ -1,0 +1,13 @@
+.DS_store
+config.yml
+*.pyc
+*.jar
+*.zip
+*.deb
+*.rpm
+*.tar.gz
+*.tgz
+tmp/*
+build/*
+dist/*
+*.egg-info
