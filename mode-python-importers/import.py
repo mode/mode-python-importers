@@ -14,7 +14,7 @@ import create_upload as cu
 import create_table as ct
 import poll_import_status as pis
 
-def import_csv(TABLE_NAME,DESCRIPTION,URL):
+def import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING):
     
     print ">>> Retrieving CSV."
     
@@ -49,7 +49,7 @@ def import_csv(TABLE_NAME,DESCRIPTION,URL):
     body = table[1]
     
     token = cu.create_upload(body)
-    status_link = ct.create_table(TABLE_NAME,DESCRIPTION,token,header)
+    status_link = ct.create_table(TABLE_NAME,DESCRIPTION,token,header,REPLACE_EXISTING)
     polling_response = pis.poll_import_status(status_link)
     
     response_status = polling_response['state']
@@ -123,6 +123,9 @@ parser.add_option("--desc",dest="description",help="The description for your tab
 parser.add_option("--no-prompt",dest="no_prompt",action="store_true",
     help="If called, you will not be prompted for a table name or description. If called and and a table name " +
     "or description is not provided, a name will be inferred and the description will be left blank.")
+parser.add_option("--replace",dest="replace_existing",action="store_true",
+    help="If called and you provide a table name that already exists, your new CSV will replace the exsiting " +
+    "table. Note that this action cannot be undone.")
 
 (options, args) = parser.parse_args()
 
@@ -134,6 +137,7 @@ URL = options.csv
 TABLE_NAME = options.table_name
 DESCRIPTION = options.description
 NO_PROMPT = options.no_prompt
+REPLACE_EXISTING = options.replace_existing
 
 if TABLE_NAME == None and NO_PROMPT == True:
     TABLE_NAME = inferred_name(URL)
@@ -142,7 +146,7 @@ elif TABLE_NAME == None and NO_PROMPT == None:
     TABLE_NAME = prompt_table_name()
 else:
     status = check_table_name(TABLE_NAME)
-    if status == "invalid" or status == "taken":
+    if status == "invalid" or (status == "taken" and REPLACE_EXISTING == None):
         print ">>> Table name is %s." % status
         sys.exit()
 
@@ -151,4 +155,4 @@ if DESCRIPTION == None and NO_PROMPT == True:
 elif DESCRIPTION == None and NO_PROMPT == None:
     DESCRIPTION = raw_input(">>> Enter table description: ")
 
-import_csv(TABLE_NAME,DESCRIPTION,URL)
+import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING)

@@ -33,6 +33,10 @@ Optional flags:
   prompting. (This will be ignored if `--name` is present. If this flag is
   set and you don't provide a description, your table's description will be
   left blank.)
+- `--replace` if the table name provided or inferred already exists, the 
+  table will be replaced with your chosen CSV. Note that table replacements
+  cannot be undone, so this flag is not recommended if the table name is
+  inferred.
 
 ## Example Usage
 

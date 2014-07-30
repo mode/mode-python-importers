@@ -18,6 +18,9 @@ def clean(text):
     body = body.encode('utf-8').strip()
     
     headers_clean = clean_headers(headers)
+    
+    print ">>> Parsing column types."
+    
     results = add_column_types(headers_clean,body)
     
     headers_all = results[0]

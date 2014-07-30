@@ -25,7 +25,7 @@ def get_username(token,secret,host):
     # headers = {'content-type': 'application/json'}
     ENDPOINT = '/api/account'
     
-    print ">>> Retriving account info."
+    print ">>> Retrieving account info."
     
     response = requests.get(host % ENDPOINT,auth=cred)
     
