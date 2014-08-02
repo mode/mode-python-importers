@@ -97,6 +97,7 @@ def check_type(column,sample_rows):
     for s in sample_rows:
         for line in csv.reader([s], skipinitialspace=True):
             cells = line
+        
         cell = cells[column]
         values.append(cell)
     
@@ -106,7 +107,7 @@ def check_type(column,sample_rows):
     return guessed_type, type_arr
 
 def check_each_row(arr):
-    type_arr = {"str":0,"number":0,"date":0,"bool":0}
+    type_arr = {"str":0,"number":0,"date":0,"bool":0,"null":0}
     
     for a in arr:
         parsed_type = parseValue(a)
@@ -115,47 +116,48 @@ def check_each_row(arr):
     return type_arr
 
 def parseValue(value):
-    val = type(value).__name__
     
-    if val == "int" or val == "float" or val == "long":
-        return "number"
-    elif val == "bool":
-        return "bool"
-    elif val == "datetime":
-        return "date"
-    elif val == "str":
-        
-        try:
-            dummy = int(value)
-            return "number"
-        except:
-            None
-        
-        try:
-            dummy = float(value)
-            return "number"
-        except:
-            None
-        
-        try:
-            dummy = parse(value)
-            return "date"
-        except:
-            None
-        
-        if value.lower() in ['true','t','false','f']:
-            return "bool"
-        else:
-            return "str"
+    if value == "":
+        return "null"
     
     else:
-        return "str"
+        
+        val = type(value).__name__
+        
+        if val == "int" or val == "float" or val == "long":
+            return "number"
+        elif val == "bool":
+            return "bool"
+        elif val == "datetime":
+            return "date"
+        elif val == "str":
+            
+            try:
+                dummy = float(value)
+                return "number"
+            except:
+                None
+            
+            try:
+                dummy = parse(value)
+                return "date"
+            except:
+                None
+            
+            if value.lower() in ['true','t','false','f']:
+                return "bool"
+            else:
+                return "str"
+        
+        else:
+            return "str"
 
 def calculate_type(type_arr):
     s = type_arr["str"]
     n = type_arr["number"]
     b = type_arr["bool"]
     d = type_arr["date"]
+    u = type_arr["null"]
     
     if min(s,1) + min(n,1) + min(b,1) + min(d,1) > 1:
         return "string"
@@ -173,8 +175,8 @@ def make_table(headers_all,row_count):
     sample_size = int(math.ceil(sample_ratio*row_count))
     
     table = []
-    head = ["new_column_name","orig_column_name","guessed_type","string","date","number","boolean"]
-    breakline = ["   ","   ","   ","   ","   ","   ","   "]
+    head = ["new_column_name","orig_column_name","guessed_type","string","date","number","boolean","null"]
+    breakline = ["   ","   ","   ","   ","   ","   ","   ","   "]
     table.append(head)
     table.append(breakline)
     
@@ -186,8 +188,9 @@ def make_table(headers_all,row_count):
         dates =     "{0:.1f}%".format(1.*h['dist']['date']/sample_size * 100)
         numbers =   "{0:.1f}%".format(1.*h['dist']['number']/sample_size * 100)
         bools =     "{0:.1f}%".format(1.*h['dist']['bool']/sample_size * 100)
+        nulls =     "{0:.1f}%".format(1.*h['dist']['null']/sample_size * 100)
         
-        row = [h['cleaned'],h['original'],h['type'],r(strs),r(dates),r(numbers),r(bools)]
+        row = [h['cleaned'],h['original'],h['type'],r(strs),r(dates),r(numbers),r(bools),r(nulls)]
         table.append(row)
     
     return table

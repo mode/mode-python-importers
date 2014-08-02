@@ -24,7 +24,7 @@ def import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING):
         if r.status_code == requests.codes.ok:
             print ">>> CSV successfully retrieved."
             text = r.text
-        
+            
         else:
             print ">>> Failed to get CSV. Returned status %i" % r.status_code
             print ">>> Error message: %s" % r.text
@@ -55,6 +55,7 @@ def import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING):
     response_status = polling_response['state']
     
     if response_status == "failed":
+        print polling_response
         response = polling_response['error_message']
         print ">>> Table creation failed."
         print ">>> Error message: %s" % response
@@ -88,7 +89,7 @@ def check_table_name(name):
     
     if response.status_code == 200:
         return "taken"
-    elif json.loads (response.text)['id'] == "not_found":
+    elif json.loads(response.text)['id'] == "not_found":
         return "valid"
     else:
         return "taken"
@@ -154,5 +155,9 @@ if DESCRIPTION == None and NO_PROMPT == True:
     DESCRIPTION = ""
 elif DESCRIPTION == None and NO_PROMPT == None:
     DESCRIPTION = raw_input(">>> Enter table description: ")
+
+if URL.find("http") == 0:
+    DESCRIPTION = DESCRIPTION + " Source: %s" % URL
+    DESCRIPTION = DESCRIPTION.strip()
 
 import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING)

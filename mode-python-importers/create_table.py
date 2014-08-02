@@ -23,7 +23,7 @@ def create_table(name,description,token,column_headers,replace_existing):
     if r.status_code == 400 and replace_existing == True:
         
         print ">>> Table already exists. Replacing existing table."
-        r = replace_request(utils.HOST,utils.USERNAME,cred,header,json_request)
+        r = replace_request(utils.HOST,utils.USERNAME,cred,header,json_request,description)
         process = "replacement"
     
     
@@ -70,7 +70,7 @@ def create_request(name,description,token,column_headers):
     
     return body
 
-def replace_request(host,username,credentials,header,json_request):
+def replace_request(host,username,credentials,header,json_request,description):
     js = json.loads(json_request)
     
     table_name = js['table']['name']

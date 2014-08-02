@@ -3,6 +3,7 @@ import re
 import requests
 import json
 import sys
+import os
 
 def normalize(string):
     clean = " ".join(string.split())        # remove trailing, leading, duplicate whitespace
@@ -39,7 +40,7 @@ def get_username(token,secret,host):
     return username
 
 ## CREDENTIALS SCRIPT
-yml = yaml.load(open("config.yml", 'r'))
+yml = yaml.load(open('config.yml', 'r'))
 
 try:
     HOST = yml['host']
