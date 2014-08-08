@@ -50,6 +50,7 @@ def clean_headers(headers):
     cleaned = []
     
     for idx,h in enumerate(header_arr):
+        
         normalized = utils.normalize(h)
         ent = {"key":idx,"original":h,"cleaned":normalized}
         cleaned.append(ent)
@@ -146,6 +147,10 @@ def parseValue(value):
             
             if value.lower() in ['true','t','false','f']:
                 return "bool"
+            
+            # elif value.lower() in ['null','none']:
+            #     return "null"
+            
             else:
                 return "str"
         
