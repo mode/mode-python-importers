@@ -7,6 +7,7 @@ sys.dont_write_bytecode = True
 import requests
 import json
 import csv
+import codecs
 import optparse
 import utils
 import clean_csv as cc
@@ -14,7 +15,7 @@ import create_upload as cu
 import create_table as ct
 import poll_import_status as pis
 
-def import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING):
+def import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING,ENCODING):
     
     print ">>> Retrieving CSV."
     
@@ -35,7 +36,7 @@ def import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING):
             if URL.find("~") == 0:
                 URL =  os.path.expanduser(URL)
             
-            f = open(URL,"rt")
+            f = codecs.open(URL,"rt",encoding=ENCODING)
             text = f.read()
             print ">>> File read successfully."
         
@@ -127,6 +128,8 @@ parser.add_option("--no-prompt",dest="no_prompt",action="store_true",
 parser.add_option("--replace",dest="replace_existing",action="store_true",
     help="If called and you provide a table name that already exists, your new CSV will replace the exsiting " +
     "table. Note that this action cannot be undone.")
+parser.add_option("--encoding",dest="encoding",
+    help="Set character encoding for file you're reading. If not set, defaults to UTF-8.")
 
 (options, args) = parser.parse_args()
 
@@ -139,6 +142,7 @@ TABLE_NAME = options.table_name
 DESCRIPTION = options.description
 NO_PROMPT = options.no_prompt
 REPLACE_EXISTING = options.replace_existing
+ENCODING = options.encoding
 
 if TABLE_NAME == None and NO_PROMPT == True:
     TABLE_NAME = inferred_name(URL)
@@ -160,4 +164,7 @@ if URL.find("http") == 0:
     DESCRIPTION = DESCRIPTION + " Source: %s" % URL
     DESCRIPTION = DESCRIPTION.strip()
 
-import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING)
+if ENCODING == None:
+    ENCODING = "utf-8"
+
+import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING,ENCODING)

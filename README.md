@@ -37,7 +37,9 @@ Optional flags:
   table will be replaced with your chosen CSV. Note that table replacements
   cannot be undone, so this flag is not recommended if the table name is
   inferred.
-
+- `--encoding` set the character encoding of your chosen CSV. Defaults to 
+  'UTF-8'. For encoding failures, often try 'Latin-1'.
+  
 ## Example Usage
 
 ```

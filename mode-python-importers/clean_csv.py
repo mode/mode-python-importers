@@ -15,7 +15,7 @@ def clean(text):
     table = get_table(text)
     headers = table[0]
     body = table[1]
-    body = body.encode('utf-8').strip()
+    body = body.encode("utf-8").strip()
     
     headers_clean = clean_headers(headers)
     
@@ -140,8 +140,16 @@ def parseValue(value):
                 None
             
             try:
+                for format in ['%Y-%m']:
+                    result = datetime.strptime(value, format)
+                return "str"
+            except:
+                None
+                
+            try:
                 dummy = parse(value)
                 return "date"
+                
             except:
                 None
             
