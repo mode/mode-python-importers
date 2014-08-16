@@ -140,8 +140,13 @@ def parseValue(value):
                 None
             
             try:
-                for format in ['%Y-%m']:
-                    result = datetime.strptime(value, format)
+                result = datetime.strptime(value, '%Y-%m')
+                return "str"
+            except:
+                None
+            
+            try:
+                result = datetime.strptime(value, '%H:%M:%S')
                 return "str"
             except:
                 None
