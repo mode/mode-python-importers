@@ -6,12 +6,12 @@ import requests
 import utils
 import json
 
-def create_table(name,description,token,column_headers,replace_existing):
+def create_table(name,description,token,column_headers,replace_existing,clean):
     
     cred = (utils.USERNAME,utils.SECRET)
     header = {'content-type': 'application/json'}
     
-    upload_request = create_request(name,description,token,column_headers)
+    upload_request = create_request(name,description,token,column_headers,clean)
     json_request = json.dumps(upload_request)
     
     post_url = utils.HOST % ("/api/" + utils.USERNAME + "/tables")
@@ -52,7 +52,7 @@ def create_table(name,description,token,column_headers,replace_existing):
         
         return self_link
 
-def create_request(name,description,token,column_headers):
+def create_request(name,description,token,column_headers,clean):
     
     columns = []
     for h in column_headers:
@@ -65,7 +65,8 @@ def create_request(name,description,token,column_headers):
         "name": name,
         "description": description,
         "columns": columns
-      }
+      },
+      "clean": clean
     }
     
     return body
