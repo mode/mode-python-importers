@@ -170,7 +170,7 @@ else:
 
 for idx,URL in enumerate(url_list):
     
-    print "STARTING TABLE %i." % idx
+    print ">>> *********** STARTING TABLE %i. *********** " % (idx + 1)
     
     TABLE_NAME = table_list[idx]
     DESCRIPTION = description_list[idx]
@@ -206,7 +206,7 @@ for idx,URL in enumerate(url_list):
     
     import_csv(TABLE_NAME,DESCRIPTION,URL,REPLACE_EXISTING,ENCODING,CLEAN)
     
-    print "TABLE %i COMPLETE." % idx
+    print ">>> *********** TABLE %i COMPLETE. *********** " % (idx + 1)
 
-print "IMPORT COMPLETE."
+print ">>> *********** IMPORT COMPLETE. *********** "
 sys.exit()
